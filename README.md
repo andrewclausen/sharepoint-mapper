@@ -15,7 +15,7 @@ This is useful for a few reasons:
 
 1. Install R -- see [these instructions](https://techvidvan.com/tutorials/install-r/).
 
-2. Download [sharepoint-mapper.R](https://github.com/andrewclausen/sharepoint-mapper/sharepoint-mapper.R)
+2. Download [sharepoint-mapper.R](https://github.com/andrewclausen/sharepoint-mapper/blob/main/sharepoint-mapper.R)
 
 
 ## How to use it:
