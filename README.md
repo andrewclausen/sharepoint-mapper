@@ -39,7 +39,9 @@ This is useful for a few reasons:
                 source("sharepoint-mapper.R")
 
  7. Use [Pandoc](https://pandoc.org/) to convert the site map into HTML, Word,
-    etc.
+    etc.  For example, you might type
+
+                pandoc site-map.md -o site-map.html --standalone
 
 
 ## Contact details
