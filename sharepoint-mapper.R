@@ -41,11 +41,13 @@ parse_raw_listings <- function(x)
 	items <- as.data.frame(x$ListData$Row)[c("FileLeafRef", "FileRef")]
 	names(items) <- c("name", "link")
 	items$link <- normalise_link(items$link)
+	items$domain <- sub("/sites/.*$", "", x$HttpRoot)
 	items$parent <- ifelse(
-		grepl("[/]", items$link),
+		grepl("/", items$link),
 		sub("(.*)/[^/]*", "\\1", items$link),
 		NA
 	)
+
 	items
 }
 
@@ -64,10 +66,11 @@ ingest_sessions <- function()
 add_missing_nodes <- function(items)
 {
 	missing_link <- items$parent[!items$parent %in% items$link]
+	missing_domain <- items$domain[!items$parent %in% items$link]
 	missing_name <- sub("^.*/([^/]*)$", "\\1", missing_link)
 	missing_parent <- sub("^(.*)/[^/]*$", "\\1", missing_link)
 	missing <- data.frame(
-		name=missing_name, link=missing_link, parent=missing_parent)
+		name=missing_name, link=missing_link, domain=missing_domain, parent=missing_parent)
 	rbind(items, missing)
 }
 
@@ -90,8 +93,8 @@ construct_trees <- function(df)
 }
 
 # Format hyperlinks in markdown format
-format_link <- function(name, link, root="https://uoe.sharepoint.com")
-	paste0("[", name, "]", "(", root, link, ")")
+format_link <- function(name, link)
+	paste0("[", name, "]", "(", link, ")")
 
 # Format a forest of folder listings as nested lists of links in Markdown
 format_trees <- function(roots, indent=-1)
@@ -104,7 +107,8 @@ format_trees <- function(roots, indent=-1)
 	result <- c()
 	for (root in roots)
 	{
-		link <- format_link(root$name, root$link)
+		url <- paste0(root$domain, root$link)
+		link <- format_link(root$name, url)
 		line <- paste0(spaces, bullet, " ", link, "\n\n")
 		child_lines <- format_trees(root$children, indent + 1)
 		result <- c(result, line, child_lines)
