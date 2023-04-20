@@ -5,7 +5,7 @@
 - [How to install it](#how-to-install-it)
 - [How to use it](#how-to-use-it)
 - [Contact details](#contact-details)
-- [License](#licence)
+- [License](#license)
 
 
 ## Introduction
